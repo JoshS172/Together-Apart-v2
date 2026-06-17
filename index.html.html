@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A private space for long-distance couples — countdowns, time zones, love notes, a memory jar, a bucket list, date ideas, and a shared photo board.">
+<title>Together, Apart — for long distance couples</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='26'%3E%F0%9F%92%9E%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont/dist/tabler-icons.min.css">
+<style>
+:root{
+  --pink:#D4537E; --pink-light:#FBEAF0; --pink-mid:#ED93B1; --pink-dark:#993556;
+  --teal:#1D9E75; --teal-light:#E1F5EE; --teal-mid:#5DCAA5; --teal-dark:#0F6E56;
+  --purple:#534AB7; --purple-light:#EEEDFE; --purple-mid:#AFA9EC; --purple-dark:#3C3489;
+  --amber:#BA7517; --amber-light:#FAEEDA; --amber-mid:#EF9F27;
+  --ink:#2A2430; --ink-soft:#6E6577; --ink-faint:#AFA6B5;
+  --paper:#FFFFFF; --cream:#F8F1EE; --line:#EEE3E8; --line-soft:#F6EEEF;
+  --radius-lg:18px; --radius-md:10px;
+  --font-display:'Fraunces', serif;
+  --font-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:'Space Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:var(--font-sans);color:var(--ink);}
+body{
+  background:linear-gradient(180deg,#FFF4F0 0%,#FBF6FB 45%,#F3F7FB 100%);
+  min-height:100vh;
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+*:focus-visible{outline:2px solid var(--pink);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+.shell{max-width:720px;margin:0 auto;padding:2.75rem 1.25rem 3.5rem;}
+
+/* Hero */
+.hero{text-align:center;margin-bottom:2.25rem;}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:0.6rem;}
+.hero-title{font-family:var(--font-display);font-weight:500;font-size:clamp(2rem,7vw,3.2rem);letter-spacing:-0.01em;color:var(--ink);line-height:1.1;}
+.hero-title em{font-style:italic;font-weight:500;color:var(--teal);}
+.hero-tagline{font-size:0.95rem;color:var(--ink-soft);max-width:380px;margin:0.6rem auto 0;line-height:1.55;}
+.hero-line{display:block;width:240px;height:22px;margin:1.4rem auto 0;}
+
+/* Nav */
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--cream);border-radius:var(--radius-lg);padding:6px;margin-bottom:1.25rem;}
+@media (min-width:640px){.nav{grid-template-columns:repeat(7,1fr);}}
+.nav-btn{padding:9px 4px;border:none;background:transparent;border-radius:var(--radius-md);cursor:pointer;font-size:12px;font-family:var(--font-sans);color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:background 0.15s,color 0.15s;}
+.nav-btn i{font-size:18px;}
+.nav-btn:hover{color:var(--ink);}
+.nav-btn.active{background:var(--paper);color:var(--ink);border:0.5px solid var(--line);font-weight:600;box-shadow:0 1px 2px rgba(42,36,48,0.04);}
+.jar-icon{width:18px;height:18px;display:block;flex-shrink:0;}
+
+/* Sections / cards */
+.section{display:none;}
+.section.active{display:block;animation:fadeIn 0.25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.card{background:var(--paper);border:0.5px solid var(--line);border-radius:var(--radius-lg);padding:1.15rem 1.3rem;margin-bottom:14px;box-shadow:0 1px 3px rgba(42,36,48,0.03);}
+.card-title{font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.08em;}
+.muted{font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:12px;}
+
+/* Countdown */
+.countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;}
+.count-box{background:var(--cream);border-radius:var(--radius-md);padding:14px 8px;text-align:center;}
+.count-num{font-family:var(--font-display);font-weight:600;font-size:30px;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;}
+.count-label{font-size:11px;color:var(--ink-faint);margin-top:5px;letter-spacing:0.04em;}
+#cd-label{font-size:13px;color:var(--ink-faint);text-align:center;}
+
+/* Clocks */
+.tz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tz-card{background:var(--cream);border-radius:var(--radius-md);padding:14px;text-align:center;}
+.tz-name{font-size:12px;color:var(--ink-soft);margin-bottom:4px;font-weight:600;}
+.tz-time{font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;}
+.tz-date{font-size:11px;color:var(--ink-faint);margin-top:2px;}
+.tz-heart{text-align:center;padding:10px 0 0;}
+.tz-heart i{font-size:18px;color:var(--pink);}
+
+/* Buttons (shared outline style) */
+.btn,.note-input-row button,.add-btn,.goal-form button,.code-btn,.save-btn,.join-row button{
+  padding:8px 14px;border-radius:var(--radius-md);border:0.5px solid var(--line);
+  background:var(--paper);color:var(--ink);cursor:pointer;font-size:13px;font-family:var(--font-sans);
+  display:inline-flex;align-items:center;gap:6px;transition:background 0.15s,border-color 0.15s;white-space:nowrap;
+}
+.btn:hover,.note-input-row button:hover,.add-btn:hover,.goal-form button:hover,.code-btn:hover,.save-btn:hover,.join-row button:hover{background:var(--cream);}
+
+/* Text inputs */
+input[type=text],input[type=date],select,.note-input-row input,.memory-input,.goal-input-el{
+  padding:9px 12px;border-radius:var(--radius-md);border:0.5px solid var(--line);
+  background:var(--paper);color:var(--ink);font-size:14px;font-family:var(--font-sans);
+}
+input[type=text]:hover,select:hover{border-color:var(--pink-mid);}
+
+/* Love notes */
+.note-input-row{display:flex;gap:8px;margin-bottom:12px;}
+.note-input-row input{flex:1;}
+.notes-list{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto;}
+.note-item{background:var(--cream);border-radius:var(--radius-md);padding:11px 13px;font-size:14px;color:var(--ink);display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.note-ts{font-size:11px;color:var(--ink-faint);margin-top:3px;white-space:nowrap;}
+.note-del,.mem-del,.goal-del{background:none;border:none;color:var(--ink-faint);cursor:pointer;font-size:16px;padding:0;line-height:1;flex-shrink:0;}
+.note-del:hover,.mem-del:hover,.goal-del:hover{color:var(--pink);}
+
+/* Memory jar */
+.jar-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.tag{padding:5px 12px;border-radius:999px;border:0.5px solid var(--line);font-size:12px;color:var(--ink-soft);cursor:pointer;background:var(--paper);transition:background 0.15s,border-color 0.15s,color 0.15s;}
+.tag.sel{background:var(--purple-light);border-color:var(--purple-mid);color:var(--purple);font-weight:600;}
+.memory-input{width:100%;margin-bottom:8px;}
+.memories-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.mem-card{border-radius:var(--radius-md);padding:11px 13px;font-size:13px;color:var(--ink);position:relative;line-height:1.45;}
+.mem-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;margin-bottom:5px;text-transform:lowercase;}
+.mem-del{position:absolute;top:8px;right:9px;}
+
+/* Bucket list */
+.goal-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px;align-items:center;}
+.goal-input-el{margin-bottom:0;width:100%;}
+.goal-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:0.5px solid var(--line-soft);}
+.goal-item:last-child{border-bottom:none;}
+.goal-check{width:19px;height:19px;border-radius:50%;border:1.5px solid var(--line);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.goal-check.done{background:var(--teal-mid);border-color:var(--teal-mid);}
+.goal-check.done i{font-size:11px;color:#fff;}
+.goal-text{font-size:14px;color:var(--ink);flex:1;}
+.goal-text.done{text-decoration:line-through;color:var(--ink-faint);}
+
+/* Date ideas */
+.date-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.date-card{background:var(--cream);border-radius:var(--radius-md);padding:13px;cursor:pointer;border:0.5px solid transparent;transition:border-color 0.15s,background 0.15s;position:relative;}
+.date-card:hover{border-color:var(--line);background:var(--paper);}
+.date-card i.date-icon{font-size:22px;margin-bottom:6px;display:block;color:var(--pink);}
+.date-card-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.date-card-desc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.date-card-chevron{position:absolute;top:13px;right:11px;font-size:14px;color:var(--ink-faint);transition:transform 0.2s;}
+.date-card.open .date-card-chevron{transform:rotate(180deg);}
+.date-card-tip{display:none;font-size:12px;color:var(--ink-soft);margin-top:9px;padding-top:9px;border-top:0.5px solid var(--line);line-height:1.55;}
+.date-card.open .date-card-tip{display:block;}
+
+/* Settings */
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:0.5px solid var(--line-soft);gap:12px;}
+.settings-row:last-child{border-bottom:none;}
+.settings-row label{font-size:14px;color:var(--ink);flex:1;}
+.settings-row small{font-size:12px;color:var(--ink-faint);display:block;margin-top:2px;font-weight:400;}
+.settings-row input,.settings-row select{width:170px;}
+.save-btn{margin-top:1rem;font-weight:600;}
+.backup-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+
+/* Photo board */
+.photo-upload-zone{border:1.5px dashed var(--line);border-radius:var(--radius-lg);padding:2rem;text-align:center;cursor:pointer;transition:background 0.15s,border-color 0.15s;margin-bottom:14px;}
+.photo-upload-zone:hover{background:var(--cream);border-color:var(--pink-mid);}
+.photo-upload-zone i{font-size:30px;color:var(--ink-faint);display:block;margin-bottom:8px;}
+.photo-upload-zone p{font-size:13px;color:var(--ink-soft);font-weight:600;}
+.photo-upload-zone small{font-size:11px;color:var(--ink-faint);}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.photo-tile{position:relative;border-radius:var(--radius-md);overflow:hidden;aspect-ratio:1;background:var(--cream);}
+.photo-tile img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-tile-overlay{position:absolute;bottom:0;left:0;right:0;padding:7px 8px;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.55) 100%);display:flex;align-items:flex-end;justify-content:space-between;opacity:0;transition:opacity 0.15s;}
+.photo-tile:hover .photo-tile-overlay,.photo-tile:focus-within .photo-tile-overlay{opacity:1;}
+.photo-caption-text{font-size:11px;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
+.photo-by{font-size:10px;color:rgba(255,255,255,0.75);display:block;}
+.photo-del-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:14px;padding:0 0 0 8px;flex-shrink:0;}
+.board-code-box{background:var(--cream);border-radius:var(--radius-md);padding:14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.board-code-val{font-family:var(--font-mono);font-size:21px;font-weight:700;letter-spacing:0.12em;color:var(--ink);}
+.code-actions{display:flex;gap:6px;}
+.status-msg{font-size:12px;color:var(--teal-dark);text-align:center;padding:6px 0;min-height:1.4em;}
+.photo-count-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+.upload-progress{height:3px;background:var(--cream);border-radius:2px;margin-bottom:10px;overflow:hidden;}
+.upload-progress-bar{height:100%;width:0;background:var(--pink);transition:width 0.3s;}
+.poster-toggle{display:flex;gap:8px;margin-bottom:12px;}
+.poster-btn{flex:1;padding:8px;border-radius:var(--radius-md);border:0.5px solid var(--line);background:var(--paper);color:var(--ink-soft);font-size:13px;cursor:pointer;font-family:var(--font-sans);transition:all 0.15s;}
+.poster-btn.active{border:1.5px solid var(--pink);background:var(--pink-light);color:var(--pink-dark);font-weight:600;}
+
+/* Empty states */
+.empty-state{text-align:center;padding:2rem 0;color:var(--ink-faint);font-size:13px;}
+.empty-state i{font-size:32px;display:block;margin-bottom:8px;opacity:0.4;}
+
+/* Footer */
+.footer{text-align:center;margin-top:1.75rem;padding:0 1rem;}
+.footer p{font-size:12px;color:var(--ink-faint);line-height:1.6;max-width:440px;margin:0 auto;}
+.footer strong{color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="hero">
+    <div class="hero-eyebrow">for two people, two time zones</div>
+    <h1 class="hero-title">Together <em>Apart</em></h1>
+    <p class="hero-tagline">a small shared space for the days until you're in the same room again</p>
+    <svg class="hero-line" viewBox="0 0 240 22" aria-hidden="true" focusable="false">
+      <line x1="8" y1="11" x2="232" y2="11" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="2 6"/>
+      <circle cx="8" cy="11" r="5" fill="var(--pink)"/>
+      <circle cx="232" cy="11" r="5" fill="var(--teal)"/>
+      <path d="M120 5 c-2.6 -3.4 -7.6 -0.8 -7.6 3.4 c0 3.4 7.6 7.6 7.6 7.6 s7.6 -4.2 7.6 -7.6 c0 -4.2 -5 -6.8 -7.6 -3.4 z" fill="var(--amber)"/>
+    </svg>
+  </header>
+
+  <nav class="nav" aria-label="Sections">
+    <button class="nav-btn active" onclick="showSection('home')" id="nav-home"><i class="ti ti-heart" aria-hidden="true"></i>home</button>
+    <button class="nav-btn" onclick="showSection('photos')" id="nav-photos"><i class="ti ti-photo" aria-hidden="true"></i>photos</button>
+    <button class="nav-btn" onclick="showSection('notes')" id="nav-notes"><i class="ti ti-writing" aria-hidden="true"></i>notes</button>
+    <button class="nav-btn" onclick="showSection('memories')" id="nav-memories">
+      <svg class="jar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="7" y="8" width="10" height="13" rx="2"/>
+        <path d="M6 8h12"/>
+        <path d="M9 5h6a1 1 0 0 1 1 1v2H8V6a1 1 0 0 1 1-1z"/>
+        <path d="M10 12c0 0 .5 1 2 1s2-1 2-1"/>
+      </svg>
+      jar
+    </button>
+    <button class="nav-btn" onclick="showSection('goals')" id="nav-goals"><i class="ti ti-list-check" aria-hidden="true"></i>goals</button>
+    <button class="nav-btn" onclick="showSection('dates')" id="nav-dates"><i class="ti ti-device-tv" aria-hidden="true"></i>dates</button>
+    <button class="nav-btn" onclick="showSection('settings')" id="nav-settings"><i class="ti ti-settings" aria-hidden="true"></i>settings</button>
+  </nav>
+
+  <main>
+    <!-- HOME -->
+    <section class="section active" id="section-home">
+      <div class="card">
+        <div class="card-title">next reunion countdown</div>
+        <div class="countdown-grid">
+          <div class="count-box"><div class="count-num" id="cd-days">—</div><div class="count-label">days</div></div>
+          <div class="count-box"><div class="count-num" id="cd-hours">—</div><div class="count-label">hours</div></div>
+          <div class="count-box"><div class="count-num" id="cd-mins">—</div><div class="count-label">minutes</div></div>
+          <div class="count-box"><div class="count-num" id="cd-secs">—</div><div class="count-label">seconds</div></div>
+        </div>
+        <div id="cd-label"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">our clocks</div>
+        <div class="tz-grid">
+          <div class="tz-card">
+            <div class="tz-name" id="tz1-name">My city</div>
+            <div class="tz-time" id="tz1-time">--:--</div>
+            <div class="tz-date" id="tz1-date"></div>
+          </div>
+          <div class="tz-card">
+            <div class="tz-name" id="tz2-name">Their city</div>
+            <div class="tz-time" id="tz2-time">--:--</div>
+            <div class="tz-date" id="tz2-date"></div>
+          </div>
+        </div>
+        <div class="tz-heart"><i class="ti ti-heart" aria-hidden="true"></i></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">daily question</div>
+        <div id="daily-q" style="font-size:15px;color:var(--ink);margin-bottom:12px;line-height:1.55;"></div>
+        <button class="btn" onclick="newQuestion()"><i class="ti ti-refresh" aria-hidden="true"></i> new question</button>
+      </div>
+    </section>
+
+    <!-- PHOTOS -->
+    <section class="section" id="section-photos">
+      <div class="card">
+        <div class="card-title">shared photo board</div>
+        <p class="muted">Give your board a couple code just for fun — and use <strong>export / import</strong> in Settings to actually share photos and entries with your partner's device.</p>
+        <div class="board-code-box">
+          <div>
+            <div style="font-size:11px;color:var(--ink-faint);margin-bottom:4px;">our couple code</div>
+            <div class="board-code-val" id="board-code-display">——</div>
+          </div>
+          <div class="code-actions">
+            <button class="code-btn" onclick="copyCode()"><i class="ti ti-copy" aria-hidden="true"></i> copy</button>
+            <button class="code-btn" onclick="newBoardCode()"><i class="ti ti-refresh" aria-hidden="true"></i> new</button>
+          </div>
+        </div>
+        <div id="board-status" class="status-msg"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">add a photo</div>
+        <p class="muted" style="margin-bottom:10px;">who's adding this one?</p>
+        <div class="poster-toggle">
+          <button class="poster-btn active" id="poster-btn-1" onclick="setPoster(1)">me</button>
+          <button class="poster-btn" id="poster-btn-2" onclick="setPoster(2)">my partner</button>
+        </div>
+        <div class="upload-progress"><div class="upload-progress-bar" id="upload-bar"></div></div>
+        <div class="photo-upload-zone" onclick="document.getElementById('photo-file-input').click()" id="upload-zone">
+          <i class="ti ti-cloud-upload" aria-hidden="true"></i>
+          <p>tap to choose a photo</p>
+          <small>any image, up to 10MB — we'll resize it to fit nicely</small>
+        </div>
+        <input type="file" id="photo-file-input" accept="image/*" style="display:none;" onchange="handlePhotoUpload(event)">
+        <div id="caption-area" style="display:none;">
+          <input type="text" id="photo-caption-input" placeholder="add a caption (optional)..." style="width:100%;margin-bottom:8px;">
+          <div style="display:flex;gap:8px;">
+            <button class="btn" style="flex:1;justify-content:center;font-weight:600;" onclick="confirmPhotoUpload()"><i class="ti ti-check" aria-hidden="true"></i> save to board</button>
+            <button class="btn" onclick="cancelUpload()"><i class="ti ti-x" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">our photos</div>
+        <div class="photo-count-badge"><i class="ti ti-photo" aria-hidden="true"></i><span id="photo-count">0 photos</span></div>
+        <div id="photo-grid" class="photo-grid"></div>
+        <div id="photo-empty" class="empty-state"><i class="ti ti-photo-plus" aria-hidden="true"></i>no photos yet — add your first!</div>
+      </div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="section" id="section-notes">
+      <div class="card">
+        <div class="card-title">love notes</div>
+        <p class="muted">jot a sweet thought to remember later</p>
+        <div class="note-input-row">
+          <input type="text" id="note-input" placeholder="write something sweet...">
+          <button onclick="addNote()"><i class="ti ti-plus" aria-hidden="true"></i> add</button>
+        </div>
+        <div class="notes-list" id="notes-list"></div>
+      </div>
+    </section>
+
+    <!-- MEMORY JAR -->
+    <section class="section" id="section-memories">
+      <div class="card">
+        <div class="card-title">memory jar</div>
+        <p class="muted">keep a jar of happy memories to revisit on the harder days</p>
+        <div class="jar-tags" id="mem-tags"></div>
+        <input class="memory-input" id="mem-input" type="text" placeholder="describe a happy memory...">
+        <button class="add-btn" onclick="addMemory()"><i class="ti ti-plus" aria-hidden="true"></i> add to jar</button>
+        <div class="memories-grid" id="memories-grid"></div>
+      </div>
+    </section>
+
+    <!-- BUCKET LIST -->
+    <section class="section" id="section-goals">
+      <div class="card">
+        <div class="card-title">couple bucket list</div>
+        <p class="muted">things to do when you're finally together</p>
+        <div class="goal-form">
+          <input type="text" id="goal-input" class="goal-input-el" placeholder="add a bucket list item...">
+          <button onclick="addGoal()"><i class="ti ti-plus" aria-hidden="true"></i> add</button>
+        </div>
+        <div id="goals-list"></div>
+      </div>
+    </section>
+
+    <!-- DATE IDEAS -->
+    <section class="section" id="section-dates">
+      <div class="card">
+        <div class="card-title">virtual date ideas</div>
+        <p class="muted">tap a card for tips on how to make it happen</p>
+        <div class="date-grid" id="date-grid"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="section" id="section-settings">
+      <div class="card">
+        <div class="card-title">our setup</div>
+        <div class="settings-row"><label>my name<small>your name or city</small></label><input type="text" id="s-name1" placeholder="e.g. Alex · Sydney"></div>
+        <div class="settings-row"><label>my timezone</label><select id="s-tz1"></select></div>
+        <div class="settings-row"><label>their name<small>partner's name or city</small></label><input type="text" id="s-name2" placeholder="e.g. Jordan · Paris"></div>
+        <div class="settings-row"><label>their timezone</label><select id="s-tz2"></select></div>
+        <div class="settings-row"><label>reunion date</label><input type="date" id="s-reunion"></div>
+        <div class="settings-row"><label>reunion label<small>what are you counting down to?</small></label><input type="text" id="s-reunion-label" placeholder="e.g. summer reunion"></div>
+        <button class="save-btn btn" onclick="saveSettings()"><i class="ti ti-check" aria-hidden="true"></i> save changes</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">backup &amp; sharing</div>
+        <p class="muted">This page lives only in your browser, so your partner won't automatically see what you add. Export a backup file and send it to them — when they import it, your notes, memories, goals and photos will be merged into theirs, and vice versa.</p>
+        <div class="backup-actions">
+          <button class="btn" onclick="exportData()"><i class="ti ti-download" aria-hidden="true"></i> export backup</button>
+          <button class="btn" onclick="document.getElementById('import-file-input').click()"><i class="ti ti-upload" aria-hidden="true"></i> import backup</button>
+          <input type="file" id="import-file-input" accept="application/json" style="display:none" onchange="importData(event)">
+        </div>
+        <div id="backup-status" class="status-msg"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Everything you add is stored only in <strong>this browser, on this device</strong> — nothing is sent to a server. Use <strong>Export</strong> in Settings to back up your data or share it with your partner.</p>
+  </footer>
+
+</div>
+
+<script>
+const TIMEZONES=['Pacific/Auckland','Australia/Sydney','Australia/Melbourne','Australia/Brisbane','Asia/Tokyo','Asia/Seoul','Asia/Shanghai','Asia/Singapore','Asia/Bangkok','Asia/Kolkata','Asia/Dubai','Europe/Moscow','Europe/Istanbul','Africa/Cairo','Europe/Athens','Europe/Berlin','Europe/Paris','Europe/Rome','Europe/Madrid','Europe/London','Atlantic/Azores','America/Sao_Paulo','America/Argentina/Buenos_Aires','America/New_York','America/Toronto','America/Chicago','America/Denver','America/Los_Angeles','America/Anchorage','Pacific/Honolulu'];
+
+const MEM_CATEGORIES=[
+  {id:'all',label:'all'},
+  {id:'funny',label:'funny',bg:'#FAEEDA',border:'#EF9F27',text:'#BA7517'},
+  {id:'sweet',label:'sweet',bg:'#FBEAF0',border:'#ED93B1',text:'#993556'},
+  {id:'adventure',label:'adventure',bg:'#E1F5EE',border:'#5DCAA5',text:'#0F6E56'},
+  {id:'first',label:'firsts',bg:'#EEEDFE',border:'#AFA9EC',text:'#3C3489'}
+];
+
+const DATE_IDEAS=[
+  {icon:'ti-movie',title:'watch party',desc:'stream a film with Teleparty or Kast',tip:"Sync up a streaming service with a watch-party extension so you both press play at the same moment. Pick something with short episodes so it's easy to fit around the time difference."},
+  {icon:'ti-chef-hat',title:'cook the same meal',desc:'cook the same recipe on video call',tip:"Agree on a simple recipe in advance and shop for ingredients separately. Prop your phone up in the kitchen on a video call, cook side by side, then sit down to eat 'together'."},
+  {icon:'ti-puzzle',title:'online game night',desc:'play Jackbox, skribbl.io, or chess',tip:"Free browser games like skribbl.io or chess.com need no downloads. For something noisier, party games work great over a screen-share on a video call."},
+  {icon:'ti-book',title:'book club of two',desc:'read the same book and chat weekly',tip:"Pick a book with short chapters and agree on a weekly chunk to read. Keep a running note of favourite lines or questions to bring to your next call."},
+  {icon:'ti-music',title:'shared playlist',desc:'build a Spotify playlist together',tip:"Start a collaborative playlist and take turns adding a song each day — bonus points for a one-line reason why. It becomes a soundtrack of your time apart."},
+  {icon:'ti-telescope',title:'stargazing call',desc:'video call outdoors and share the sky',tip:"Step outside at a time that overlaps for both of you, even if it's daytime for one of you. Describe what you can see — it's one thing you're both looking at."},
+  {icon:'ti-brush',title:'art date',desc:'follow a drawing tutorial together',tip:"Find a 'draw along' video and follow it together on a call. No talent required — the fun is comparing results afterwards."},
+  {icon:'ti-coffee',title:'coffee chat',desc:'make your drinks and catch up',tip:"Set a recurring time that works across both time zones, even if it's morning coffee for one of you and evening tea for the other. Treat it like a standing date, not just a check-in."}
+];
+
+const QUESTIONS=["What's a small moment from today that made you smile?","If we were together right now, what would we be doing?","What's something you're looking forward to sharing with me in person?","What song reminds you of me this week?","Tell me about someone new you met or talked to recently.","What's a place you walked past today that you wish I could see?","What's something you're proud of that you haven't told me yet?","If you could teleport me to your side for just one hour today, what would we do?","What's a little thing I do that you miss the most right now?","If our relationship were a season, which one is it feeling like right now?","What dream have you had lately that you haven't told me about?","What's a goal you're working on just for yourself this month?","What's the most beautiful thing you've seen this week?","Tell me about a meal you've eaten this week — describe every detail.","What's something you've learned about yourself since we've been apart?"];
+
+let state={name1:'My city',tz1:'Australia/Sydney',name2:'Their city',tz2:'America/New_York',reunion:'',reunionLabel:'next reunion',notes:[],memories:[],goals:[],memTag:'all',boardCode:'',photos:[]};
+let pendingPhotoData=null;
+let activePoster=1;
+
+function genCode(){return Math.random().toString(36).substring(2,8).toUpperCase();}
+
+function load(){
+  try{const s=localStorage.getItem('togetherApartData');if(s)state={...state,...JSON.parse(s)};}catch(e){}
+  if(!state.boardCode){state.boardCode=genCode();save();}
+}
+function save(){
+  try{localStorage.setItem('togetherApartData',JSON.stringify(state));}
+  catch(e){showStatus('backup-status','Storage is full — try exporting a backup and removing a few older photos.',true);}
+}
+
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+}
+
+function populateTZSelects(){
+  ['s-tz1','s-tz2'].forEach(id=>{
+    const sel=document.getElementById(id);sel.innerHTML='';
+    TIMEZONES.forEach(tz=>{const o=document.createElement('option');o.value=tz;o.textContent=tz.replace(/_/g,' ');sel.appendChild(o);});
+  });
+}
+
+function loadSettings(){
+  document.getElementById('s-name1').value=state.name1;
+  document.getElementById('s-name2').value=state.name2;
+  document.getElementById('s-reunion').value=state.reunion;
+  document.getElementById('s-reunion-label').value=state.reunionLabel;
+  document.getElementById('s-tz1').value=state.tz1;
+  document.getElementById('s-tz2').value=state.tz2;
+}
+
+function saveSettings(){
+  state.name1=document.getElementById('s-name1').value.trim()||'My city';
+  state.name2=document.getElementById('s-name2').value.trim()||'Their city';
+  state.reunion=document.getElementById('s-reunion').value;
+  state.reunionLabel=document.getElementById('s-reunion-label').value.trim()||'next reunion';
+  state.tz1=document.getElementById('s-tz1').value;
+  state.tz2=document.getElementById('s-tz2').value;
+  save();
+  updateClocks();
+  const btn=document.querySelector('.save-btn');
+  const original='<i class="ti ti-check" aria-hidden="true"></i> save changes';
+  btn.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> saved!';
+  btn.style.color='var(--teal-dark)';
+  setTimeout(()=>{btn.innerHTML=original;btn.style.color='';},1500);
+}
+
+function updateClocks(){
+  function fmt(tz,timeEl,dateEl){
+    const now=new Date();
+    try{
+      document.getElementById(timeEl).textContent=now.toLocaleTimeString('en-AU',{timeZone:tz,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+      document.getElementById(dateEl).textContent=now.toLocaleDateString('en-AU',{timeZone:tz,weekday:'short',month:'short',day:'numeric'});
+    }catch(e){document.getElementById(timeEl).textContent='--:--';}
+  }
+  fmt(state.tz1,'tz1-time','tz1-date');
+  fmt(state.tz2,'tz2-time','tz2-date');
+  document.getElementById('tz1-name').textContent=state.name1;
+  document.getElementById('tz2-name').textContent=state.name2;
+}
+
+function updateCountdown(){
+  const ids=['cd-days','cd-hours','cd-mins','cd-secs'];
+  if(!state.reunion){
+    ids.forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('cd-label').textContent='set a reunion date in settings';
+    return;
+  }
+  const target=new Date(state.reunion+'T00:00:00');
+  const diff=target-new Date();
+  if(diff<=0){
+    ids.forEach(id=>document.getElementById(id).textContent='🎉');
+    document.getElementById('cd-label').textContent='you made it! '+(state.reunionLabel||'');
+    return;
+  }
+  document.getElementById('cd-days').textContent=Math.floor(diff/86400000);
+  document.getElementById('cd-hours').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-mins').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-secs').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  document.getElementById('cd-label').textContent='until '+(state.reunionLabel||'next reunion');
+}
+
+let qIdx=Math.floor(Math.random()*QUESTIONS.length);
+function newQuestion(){
+  qIdx=(qIdx+Math.floor(Math.random()*(QUESTIONS.length-1))+1)%QUESTIONS.length;
+  document.getElementById('daily-q').textContent=QUESTIONS[qIdx];
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* Love notes */
+function renderNotes(){
+  const el=document.getElementById('notes-list');
+  if(!state.notes.length){el.innerHTML='<div class="empty-state"><i class="ti ti-notes" aria-hidden="true"></i>no notes yet — write your first!</div>';return;}
+  el.innerHTML=state.notes.slice().reverse().map((n,i)=>{
+    const ri=state.notes.length-1-i;
+    return`<div class="note-item"><div><div style="margin-bottom:2px;">${esc(n.text)}</div><div class="note-ts">${esc(n.ts)}</div></div><button class="note-del" onclick="delNote(${ri})" aria-label="delete note"><i class="ti ti-x" aria-hidden="true"></i></button></div>`;
+  }).join('');
+}
+function addNote(){
+  const inp=document.getElementById('note-input');const v=inp.value.trim();if(!v)return;
+  state.notes.push({text:v,ts:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})});
+  inp.value='';save();renderNotes();
+}
+function delNote(i){state.notes.splice(i,1);save();renderNotes();}
+
+/* Memory jar */
+function renderMemTags(){
+  document.getElementById('mem-tags').innerHTML=MEM_CATEGORIES.map(c=>`<button class="tag${state.memTag===c.id?' sel':''}" onclick="setMemTag('${c.id}')">${c.label}</button>`).join('');
+}
+function setMemTag(id){state.memTag=id;renderMemTags();renderMemories();}
+function renderMemories(){
+  const el=document.getElementById('memories-grid');
+  const filtered=state.memories.filter(m=>state.memTag==='all'||m.cat===state.memTag);
+  if(!filtered.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><i class="ti ti-flask" aria-hidden="true"></i>no memories yet — add your first!</div>';return;}
+  el.innerHTML=filtered.map(m=>{
+    const cat=MEM_CATEGORIES.find(c=>c.id===m.cat)||MEM_CATEGORIES[2];
+    const ri=state.memories.indexOf(m);
+    return`<div class="mem-card" style="background:${cat.bg};border:0.5px solid ${cat.border}"><button class="mem-del" onclick="delMemory(${ri})" aria-label="delete memory"><i class="ti ti-x" aria-hidden="true"></i></button><span class="mem-badge" style="background:${cat.bg};color:${cat.text};border:0.5px solid ${cat.border}">${cat.label}</span><div>${esc(m.text)}</div></div>`;
+  }).join('');
+}
+function addMemory(){
+  const inp=document.getElementById('mem-input');const v=inp.value.trim();if(!v)return;
+  const cat=state.memTag==='all'?'sweet':state.memTag;
+  state.memories.push({text:v,cat});inp.value='';save();renderMemories();
+}
+function delMemory(i){state.memories.splice(i,1);save();renderMemories();}
+
+/* Bucket list */
+function renderGoals(){
+  const el=document.getElementById('goals-list');
+  if(!state.goals.length){el.innerHTML='<div class="empty-state"><i class="ti ti-list" aria-hidden="true"></i>add your first dream together!</div>';return;}
+  el.innerHTML=state.goals.map((g,i)=>`<div class="goal-item"><div class="goal-check${g.done?' done':''}" onclick="toggleGoal(${i})" role="checkbox" aria-checked="${g.done}" tabindex="0">${g.done?'<i class="ti ti-check" aria-hidden="true"></i>':''}</div><span class="goal-text${g.done?' done':''}">${esc(g.text)}</span><button class="goal-del" onclick="delGoal(${i})" aria-label="delete goal"><i class="ti ti-trash" aria-hidden="true"></i></button></div>`).join('');
+}
+function addGoal(){
+  const inp=document.getElementById('goal-input');const v=inp.value.trim();if(!v)return;
+  state.goals.push({text:v,done:false});inp.value='';save();renderGoals();
+}
+function toggleGoal(i){state.goals[i].done=!state.goals[i].done;save();renderGoals();}
+function delGoal(i){state.goals.splice(i,1);save();renderGoals();}
+
+/* Date ideas */
+function renderDateIdeas(){
+  document.getElementById('date-grid').innerHTML=DATE_IDEAS.map(d=>`<div class="date-card" onclick="this.classList.toggle('open')"><i class="ti ${d.icon} date-icon" aria-hidden="true"></i><i class="ti ti-chevron-down date-card-chevron" aria-hidden="true"></i><div class="date-card-title">${d.title}</div><div class="date-card-desc">${d.desc}</div><div class="date-card-tip">${d.tip}</div></div>`).join('');
+}
+
+/* Board code */
+function renderBoardCode(){document.getElementById('board-code-display').textContent=state.boardCode;}
+function copyCode(){
+  navigator.clipboard.writeText(state.boardCode).then(()=>{
+    const btn=document.querySelector('.code-btn');
+    const original=btn.innerHTML;
+    btn.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> copied!';
+    setTimeout(()=>{btn.innerHTML=original;},1500);
+  }).catch(()=>showStatus('board-status','your code is '+state.boardCode));
+}
+function newBoardCode(){
+  if(!confirm('Generate a new couple code?'))return;
+  state.boardCode=genCode();save();renderBoardCode();
+}
+function showStatus(elId,msg,isError){
+  const el=document.getElementById(elId);
+  el.textContent=msg;
+  el.style.color=isError?'var(--pink-dark)':'var(--teal-dark)';
+  if(msg)setTimeout(()=>{if(el.textContent===msg)el.textContent='';},4000);
+}
+
+/* Photos */
+function setPoster(n){
+  activePoster=n;
+  document.getElementById('poster-btn-1').classList.toggle('active',n===1);
+  document.getElementById('poster-btn-2').classList.toggle('active',n===2);
+}
+function compressImage(file,maxDim,quality){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        let{width,height}=img;
+        if(width>maxDim||height>maxDim){
+          if(width>height){height=Math.round(height*maxDim/width);width=maxDim;}
+          else{width=Math.round(width*maxDim/height);height=maxDim;}
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=width;canvas.height=height;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,width,height);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.onerror=()=>reject(new Error('could not read image'));
+      img.src=e.target.result;
+    };
+    reader.onerror=()=>reject(new Error('could not read file'));
+    reader.readAsDataURL(file);
+  });
+}
+function handlePhotoUpload(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(file.size>10*1024*1024){alert('that photo is over 10MB — please choose a smaller one');return;}
+  const bar=document.getElementById('upload-bar');
+  bar.style.width='35%';
+  compressImage(file,1280,0.82).then(dataUrl=>{
+    bar.style.width='100%';
+    pendingPhotoData=dataUrl;
+    document.getElementById('upload-zone').style.display='none';
+    document.getElementById('caption-area').style.display='block';
+    document.getElementById('photo-caption-input').value='';
+    document.getElementById('photo-caption-input').focus();
+    setTimeout(()=>bar.style.width='0%',500);
+  }).catch(()=>{
+    bar.style.width='0%';
+    alert("sorry, that image couldn't be processed — try a different file");
+  });
+  event.target.value='';
+}
+function confirmPhotoUpload(){
+  if(!pendingPhotoData)return;
+  const caption=document.getElementById('photo-caption-input').value.trim();
+  const posterName=activePoster===1?state.name1:state.name2;
+  state.photos.push({data:pendingPhotoData,caption,poster:posterName,ts:new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})});
+  pendingPhotoData=null;
+  save();renderPhotos();
+  document.getElementById('upload-zone').style.display='block';
+  document.getElementById('caption-area').style.display='none';
+}
+function cancelUpload(){
+  pendingPhotoData=null;
+  document.getElementById('upload-zone').style.display='block';
+  document.getElementById('caption-area').style.display='none';
+}
+function renderPhotos(){
+  const grid=document.getElementById('photo-grid');
+  const empty=document.getElementById('photo-empty');
+  const photos=state.photos;
+  document.getElementById('photo-count').textContent=photos.length+' photo'+(photos.length===1?'':'s');
+  if(!photos.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=photos.slice().reverse().map((p,i)=>{
+    const ri=photos.length-1-i;
+    return`<div class="photo-tile"><img src="${p.data}" alt="${esc(p.caption||'shared photo')}" loading="lazy"><div class="photo-tile-overlay"><div style="overflow:hidden;"><span class="photo-caption-text">${esc(p.caption||p.ts)}</span><span class="photo-by">${esc(p.poster)}</span></div><button class="photo-del-btn" onclick="delPhoto(${ri})" aria-label="delete photo"><i class="ti ti-trash" aria-hidden="true"></i></button></div></div>`;
+  }).join('');
+}
+function delPhoto(i){
+  if(!confirm('remove this photo?'))return;
+  state.photos.splice(i,1);save();renderPhotos();
+}
+
+/* Backup / sharing */
+function exportData(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='together-apart-backup.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showStatus('backup-status','backup downloaded!');
+}
+function importData(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    let imported;
+    try{imported=JSON.parse(e.target.result);}
+    catch(err){showStatus('backup-status','that file could not be read — make sure it is a Together Apart backup.',true);return;}
+    const merge=confirm('Merge this backup into your current data? Notes, memories, goals and photos from the file will be added to yours. Click Cancel to instead replace everything with the file.');
+    if(merge){
+      state.notes=[...state.notes,...(imported.notes||[])];
+      state.memories=[...state.memories,...(imported.memories||[])];
+      state.goals=[...state.goals,...(imported.goals||[])];
+      state.photos=[...state.photos,...(imported.photos||[])];
+      if(imported.reunion&&!state.reunion)state.reunion=imported.reunion;
+      if(imported.reunionLabel&&state.reunionLabel==='next reunion')state.reunionLabel=imported.reunionLabel;
+    }else{
+      state={...state,...imported};
+    }
+    save();
+    loadSettings();renderBoardCode();renderNotes();renderMemTags();renderMemories();renderGoals();renderPhotos();updateClocks();updateCountdown();
+    showStatus('backup-status','data imported successfully!');
+  };
+  reader.onerror=()=>showStatus('backup-status','could not read that file.',true);
+  reader.readAsText(file);
+  event.target.value='';
+}
+
+function tick(){updateClocks();updateCountdown();}
+
+function init(){
+  load();
+  populateTZSelects();
+  loadSettings();
+  renderBoardCode();
+  document.getElementById('daily-q').textContent=QUESTIONS[qIdx];
+  renderNotes();renderMemTags();renderMemories();renderGoals();renderDateIdeas();renderPhotos();
+  tick();setInterval(tick,1000);
+  document.getElementById('note-input').addEventListener('keydown',e=>{if(e.key==='Enter')addNote();});
+  document.getElementById('mem-input').addEventListener('keydown',e=>{if(e.key==='Enter')addMemory();});
+  document.getElementById('goal-input').addEventListener('keydown',e=>{if(e.key==='Enter')addGoal();});
+  document.getElementById('photo-caption-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmPhotoUpload();});
+  document.querySelectorAll('.goal-check').forEach(()=>{});
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.activeElement&&document.activeElement.classList.contains('goal-check')){document.activeElement.click();}
+});
+init();
+</script>
+</body>
+</html>
