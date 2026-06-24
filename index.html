@@ -1081,20 +1081,28 @@ async function getTotWho(id){
 function showWhoPicker(){
   return new Promise(resolve=>{
     const overlay=document.createElement('div');
+    overlay.id='tot-who-overlay';
     overlay.style.cssText='position:fixed;inset:0;background:rgba(42,36,48,0.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;';
     overlay.innerHTML=`
       <div style="background:var(--paper);border-radius:var(--r-lg);padding:1.5rem;max-width:320px;width:100%;text-align:center;">
         <div style="font-family:var(--font-d);font-size:1.2rem;margin-bottom:0.5rem;">who's picking?</div>
         <p style="font-size:13px;color:var(--ink-soft);margin-bottom:1.25rem;line-height:1.5;">tap your name so we record the right answer</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <button style="padding:13px;border-radius:var(--r-md);border:1.5px solid var(--teal);background:var(--teal-light);color:var(--teal-dark);font-size:15px;font-weight:700;font-family:var(--font-s);cursor:pointer;" onclick="this.closest('div[style]').parentNode.__resolve('josh');this.closest('div[style]').remove()">Josh</button>
-          <button style="padding:13px;border-radius:var(--r-md);border:1.5px solid var(--purple);background:var(--purple-light);color:var(--purple-dark);font-size:15px;font-weight:700;font-family:var(--font-s);cursor:pointer;" onclick="this.closest('div[style]').parentNode.__resolve('loni');this.closest('div[style]').remove()">Loni</button>
+          <button style="padding:13px;border-radius:var(--r-md);border:1.5px solid var(--teal);background:var(--teal-light);color:var(--teal-dark);font-size:15px;font-weight:700;font-family:var(--font-s);cursor:pointer;" id="tot-pick-josh">Josh</button>
+          <button style="padding:13px;border-radius:var(--r-md);border:1.5px solid var(--purple);background:var(--purple-light);color:var(--purple-dark);font-size:15px;font-weight:700;font-family:var(--font-s);cursor:pointer;" id="tot-pick-loni">Loni</button>
         </div>
-        <button style="margin-top:10px;background:none;border:none;font-size:12px;color:var(--ink-faint);cursor:pointer;" onclick="this.closest('div[style]').parentNode.__resolve(null);this.closest('div[style]').remove()">cancel</button>
+        <button style="margin-top:10px;background:none;border:none;font-size:12px;color:var(--ink-faint);cursor:pointer;" id="tot-pick-cancel">cancel</button>
       </div>
     `;
-    overlay.__resolve=resolve;
     document.body.appendChild(overlay);
+    function close(val){
+      const el=document.getElementById('tot-who-overlay');
+      if(el)el.remove();
+      resolve(val);
+    }
+    document.getElementById('tot-pick-josh').onclick=()=>close('josh');
+    document.getElementById('tot-pick-loni').onclick=()=>close('loni');
+    document.getElementById('tot-pick-cancel').onclick=()=>close(null);
   });
 }
 
