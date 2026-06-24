@@ -733,8 +733,9 @@ async function loadHeartbeats(){
   const rows=await dbSelect('heartbeats');
   const el=document.getElementById('hb-log');
   if(!rows.length){el.innerHTML='<div class="empty-state" style="padding:0.75rem 0;"><i class="ti ti-heart"></i>no heartbeats yet — send Loni the first!</div>';return;}
-  el.innerHTML=rows.slice(0,6).map(h=>`<div class="hb-item"><i class="ti ti-heart"></i><span><strong>${esc(h.poster||'someone')}</strong> sent a heartbeat</span><span class="hb-time">${fmtDate(h.created_at)}</span></div>`).join('');
+  el.innerHTML=rows.slice(0,10).map(h=>`<div class="hb-item"><i class="ti ti-heart"></i><span><strong>${esc(h.poster||'someone')}</strong> sent a heartbeat</span><span class="hb-time">${fmtDate(h.created_at)}</span><button class="del-btn" onclick="delHeartbeat('${h.id}')" title="delete"><i class="ti ti-trash"></i></button></div>`).join('');
 }
+async function delHeartbeat(id){await dbDelete('heartbeats',id);loadHeartbeats();}
 
 // ── LISTENING ─────────────────────────────────────────────────
 async function shareListening(){
@@ -752,7 +753,11 @@ async function loadListening(){
   const {data}=await sb.from('listening').select('*').eq('user_id',user.id).maybeSingle();
   const el=document.getElementById('listening-display');
   if(!data||!data.title){el.innerHTML='<div class="empty-state" style="padding:0.5rem 0;"><i class="ti ti-music"></i>nothing shared yet</div>';return;}
-  el.innerHTML=`<div class="now-playing-card"><div class="now-playing"><div class="np-art"><i class="ti ti-music"></i></div><div class="np-info"><div class="np-title">${esc(data.title)}</div>${data.artist?`<div class="np-artist">${esc(data.artist)}</div>`:''}<div class="np-who">${esc(data.poster||'')} is listening</div>${data.link?`<a class="np-link" href="${esc(data.link)}" target="_blank" rel="noopener"><i class="ti ti-external-link"></i> open link</a>`:''}</div></div></div>`;
+  el.innerHTML=`<div class="now-playing-card"><div class="now-playing"><div class="np-art"><i class="ti ti-music"></i></div><div class="np-info"><div class="np-title">${esc(data.title)}</div>${data.artist?`<div class="np-artist">${esc(data.artist)}</div>`:''}<div class="np-who">${esc(data.poster||'')} is listening</div>${data.link?`<a class="np-link" href="${esc(data.link)}" target="_blank" rel="noopener"><i class="ti ti-external-link"></i> open link</a>`:''}</div><button class="del-btn" onclick="clearListening()" title="clear" style="align-self:flex-start;margin-left:8px;"><i class="ti ti-trash"></i></button></div></div>`;
+}
+async function clearListening(){
+  await sb.from('listening').delete().eq('user_id',user.id);
+  loadListening();toast('Cleared 🎵');
 }
 
 // ── LETTERS ───────────────────────────────────────────────────
@@ -798,8 +803,9 @@ async function loadTimeline(){
 function renderTL(rows,elId){
   const el=document.getElementById(elId);if(!el)return;
   if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-timeline"></i>no moments yet — add the first chapter of your story!</div>';return;}
-  el.innerHTML='<div class="timeline">'+rows.map(t=>`<div class="tl-item"><div class="tl-dot${t.type==='milestone'?' milestone':''}"></div><div class="tl-date-label">${fmtDateShort(t.date)}</div><div class="tl-text">${esc(t.text)}${t.type==='milestone'?' 🌟':''}</div><div class="tl-who">${esc(t.poster||'')}</div></div>`).join('')+'</div>';
+  el.innerHTML='<div class="timeline">'+rows.map(t=>`<div class="tl-item"><div class="tl-dot${t.type==='milestone'?' milestone':''}"></div><div class="tl-date-label">${fmtDateShort(t.date)}</div><div class="tl-text">${esc(t.text)}${t.type==='milestone'?' 🌟':''}</div><div class="tl-who" style="display:flex;align-items:center;justify-content:space-between;">${esc(t.poster||'')}<button class="del-btn" onclick="delTimeline('${t.id}')" title="delete"><i class="ti ti-trash"></i></button></div></div>`).join('')+'</div>';
 }
+async function delTimeline(id){await dbDelete('timeline',id);loadTimeline();}
 
 // ── WATCH LIST ────────────────────────────────────────────────
 function setWatchFilter(f){
