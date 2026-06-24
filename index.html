@@ -248,7 +248,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
 <div id="setup-screen">
   <div class="setup-card">
     <div class="setup-title">Together <em>Apart</em></div>
-    <p class="setup-sub">Enter your Supabase credentials, then sign in to your shared couple account.</p>
+    <p class="setup-sub">Enter your Supabase credentials, then sign in to Josh &amp; Loni's shared space.</p>
     <div id="step-creds">
       <label class="setup-label">Supabase Project URL</label>
       <input class="setup-input" id="sb-url" placeholder="https://xxxx.supabase.co" autocomplete="off" spellcheck="false">
@@ -267,7 +267,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <button class="btn-primary" onclick="signIn()">Sign In</button>
       <div class="setup-divider">or</div>
       <button class="btn-outline" onclick="signUp()">Create Account</button>
-      <p style="font-size:11px;color:var(--ink-faint);text-align:center;margin-top:8px;line-height:1.5;">Both you and your partner use the <strong>same email &amp; password</strong>.</p>
+      <p style="font-size:11px;color:var(--ink-faint);text-align:center;margin-top:8px;line-height:1.5;">Josh and Loni share the <strong>same email &amp; password</strong>.</p>
     </div>
   </div>
 </div>
@@ -281,9 +281,9 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
   </div>
   <div class="shell">
     <header class="hero">
-      <div class="hero-eyebrow">for two people, two time zones</div>
+      <div class="hero-eyebrow">where Australia and Germany meet</div>
       <h1 class="hero-title">Together <em>Apart</em></h1>
-      <p class="hero-tagline">a small shared space for the days until you're in the same room again</p>
+      <p class="hero-tagline">somewhere for us to share until we're in the same room again</p>
       <div class="hero-user"><i class="ti ti-user" style="font-size:14px;color:var(--pink);"></i><span id="hero-email"></span></div>
     </header>
 
@@ -302,7 +302,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <!-- HOME -->
       <section class="section active" id="section-home">
         <div class="card">
-          <div class="card-title">next reunion countdown</div>
+          <div class="card-title">countdown to you</div>
           <div class="countdown-grid">
             <div class="count-box"><div class="count-num" id="cd-days">—</div><div class="count-label">days</div></div>
             <div class="count-box"><div class="count-num" id="cd-hours">—</div><div class="count-label">hours</div></div>
@@ -332,7 +332,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         <div class="card">
           <div class="card-title">our story so far</div>
           <div id="tl-home"></div>
-          <button class="btn-sm" style="margin-top:10px;" onclick="showSection('connect')"><i class="ti ti-plus"></i> add a moment</button>
+          <button class="btn-sm" style="margin-top:10px;" onclick="showSection('connect')"><i class="ti ti-plus"></i> add a moment to our story</button>
         </div>
       </section>
 
@@ -340,10 +340,10 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <section class="section" id="section-photos">
         <div class="card">
           <div class="card-title">shared photo board</div>
-          <div style="font-size:12px;color:var(--teal-dark);background:var(--teal-light);border-radius:var(--r-md);padding:8px 12px;margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i class="ti ti-antenna-bars-5"></i> real-time — your partner sees photos instantly</div>
+          <div style="font-size:12px;color:var(--teal-dark);background:var(--teal-light);border-radius:var(--r-md);padding:8px 12px;margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i class="ti ti-antenna-bars-5"></i> real-time — Loni sees photos the moment you add them</div>
           <div class="poster-toggle">
-            <button class="poster-btn active" id="poster-btn-1" onclick="setPoster(1)">me</button>
-            <button class="poster-btn" id="poster-btn-2" onclick="setPoster(2)">my partner</button>
+            <button class="poster-btn active" id="poster-btn-1" onclick="setPoster(1)">Josh</button>
+            <button class="poster-btn" id="poster-btn-2" onclick="setPoster(2)">Loni</button>
           </div>
           <div class="prog-wrap"><div class="prog-bar" id="upload-bar"></div></div>
           <div class="photo-upload-zone" onclick="document.getElementById('photo-file-input').click()" id="upload-zone">
@@ -362,7 +362,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
           <div class="card-title">our photos</div>
           <div style="font-size:12px;color:var(--ink-soft);margin-bottom:10px;display:flex;align-items:center;gap:5px;"><i class="ti ti-photo"></i><span id="photo-count">0 photos</span></div>
           <div id="photo-grid" class="photo-grid"></div>
-          <div id="photo-empty" class="empty-state"><i class="ti ti-photo-plus"></i>no photos yet!</div>
+          <div id="photo-empty" class="empty-state"><i class="ti ti-photo-plus"></i>no photos yet — add the first one for us!</div>
         </div>
       </section>
 
@@ -370,7 +370,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <section class="section" id="section-notes">
         <div class="card">
           <div class="card-title">love notes</div>
-          <p class="muted">sweet thoughts that appear on both your screens instantly</p>
+          <p class="muted">sweet thoughts that appear on both our screens instantly</p>
           <div class="row-input">
             <input type="text" id="note-input" placeholder="write something sweet…">
             <button onclick="addNote()"><i class="ti ti-send"></i> send</button>
@@ -383,7 +383,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <section class="section" id="section-memories">
         <div class="card">
           <div class="card-title">memory jar</div>
-          <p class="muted">happy memories to revisit on the harder days</p>
+          <p class="muted">happy memories of us to revisit on the harder days</p>
           <div class="jar-tags" id="mem-tags"></div>
           <input class="wide-input" id="mem-input" type="text" placeholder="describe a happy memory…">
           <button class="btn-sm" onclick="addMemory()"><i class="ti ti-plus"></i> add to jar</button>
@@ -395,9 +395,9 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <section class="section" id="section-goals">
         <div class="card">
           <div class="card-title">couple bucket list</div>
-          <p class="muted">things to do when you're finally together</p>
+          <p class="muted">things to do when we're finally together</p>
           <div class="goal-form">
-            <input type="text" id="goal-input" placeholder="add a bucket list item…">
+            <input type="text" id="goal-input" placeholder="add something for us to do together…">
             <button class="btn-sm" onclick="addGoal()"><i class="ti ti-plus"></i> add</button>
           </div>
           <div id="goals-list"></div>
@@ -409,10 +409,10 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         <!-- Heartbeat -->
         <div class="card">
           <div class="card-title">heartbeat</div>
-          <p class="muted">one tap to say "thinking of you" — no words needed</p>
+          <p class="muted">one tap to say "thinking of you, Loni" — no words needed</p>
           <div class="heartbeat-wrap">
             <button class="hb-btn" id="hb-btn" onclick="sendHeartbeat()"><i class="ti ti-heart"></i></button>
-            <div class="hb-label" id="hb-label">tap to send a heartbeat 💓</div>
+            <div class="hb-label" id="hb-label">tap to send Loni a heartbeat 💓</div>
           </div>
           <div class="hb-log" id="hb-log"></div>
         </div>
@@ -420,14 +420,14 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         <!-- Listening -->
         <div class="card">
           <div class="card-title">listening together</div>
-          <p class="muted">share what you're listening to right now</p>
+          <p class="muted">share what you're listening to right now — Josh and Loni's soundtrack</p>
           <div id="listening-display"></div>
           <div style="margin-top:12px;">
             <div class="listen-form">
               <input type="text" id="listen-title" placeholder="song or podcast title…">
               <input type="text" id="listen-artist" placeholder="artist or show name…">
               <input type="text" id="listen-link" placeholder="Spotify / YouTube link (optional)…">
-              <button class="btn-sm" onclick="shareListening()"><i class="ti ti-music"></i> share what I'm listening to</button>
+              <button class="btn-sm" onclick="shareListening()"><i class="ti ti-music"></i> share with Loni</button>
             </div>
           </div>
         </div>
@@ -435,7 +435,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         <!-- Letters -->
         <div class="card">
           <div class="card-title">letter box</div>
-          <p class="muted">write a letter — your partner opens it like real mail 💌</p>
+          <p class="muted">write a letter we can open like real mail 💌</p>
           <div class="letter-compose">
             <textarea id="letter-input" placeholder="dear you…&#10;&#10;write something from the heart…"></textarea>
             <button class="btn-sm" onclick="sendLetter()"><i class="ti ti-mail"></i> seal &amp; send</button>
@@ -446,7 +446,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         <!-- Timeline -->
         <div class="card">
           <div class="card-title">our timeline</div>
-          <p class="muted">the moments that make up your story</p>
+          <p class="muted">the moments that make up our story</p>
           <div class="tl-form">
             <input type="text" id="tl-text" placeholder="describe the moment…">
             <input type="date" id="tl-date">
@@ -464,7 +464,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <section class="section" id="section-watch">
         <div class="card">
           <div class="card-title">watch list</div>
-          <p class="muted">movies and shows to watch together</p>
+          <p class="muted">movies and shows for Josh &amp; Loni to watch together</p>
           <div class="watch-add">
             <input type="text" id="watch-input" placeholder="title…">
             <select id="watch-type"><option value="movie">🎬 movie</option><option value="tv">📺 tv show</option></select>
@@ -486,7 +486,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
           <div class="card-title">our setup</div>
           <div class="settings-row"><label>my name<small>your name or city</small></label><input type="text" id="s-name1" placeholder="e.g. Alex · Sydney"></div>
           <div class="settings-row"><label>my timezone</label><select id="s-tz1"></select></div>
-          <div class="settings-row"><label>their name<small>partner's name or city</small></label><input type="text" id="s-name2" placeholder="e.g. Sofia · Berlin"></div>
+          <div class="settings-row"><label>their name<small>Loni's name or city</small></label><input type="text" id="s-name2" placeholder="e.g. Loni · Berlin"></div>
           <div class="settings-row"><label>their timezone</label><select id="s-tz2"></select></div>
           <div class="settings-row"><label>reunion date</label><input type="date" id="s-reunion"></div>
           <div class="settings-row"><label>reunion label<small>counting down to?</small></label><input type="text" id="s-reunion-label" placeholder="e.g. summer together"></div>
@@ -494,12 +494,12 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         </div>
         <div class="card" style="background:var(--cream);">
           <div class="card-title">account</div>
-          <p class="muted">Signed in as <strong id="settings-email"></strong>. Share this email and password with your partner so you both access the same data.</p>
+          <p class="muted">Signed in as <strong id="settings-email"></strong>. Josh and Loni share this login to see the same data.</p>
           <button class="btn-sm" onclick="signOut()"><i class="ti ti-logout"></i> sign out</button>
         </div>
       </section>
     </main>
-    <footer><p>All data lives in your private Supabase project.</p></footer>
+    <footer><p>Made with 💛 for Josh &amp; Loni — across Australia and Germany.</p></footer>
   </div>
 </div>
 
@@ -684,7 +684,7 @@ function loadAll(){loadNotes();loadMemories();loadGoals();loadPhotos();loadHeart
 async function loadNotes(){
   const rows=await dbSelect('notes');
   const el=document.getElementById('notes-list');
-  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-notes"></i>no notes yet — send the first!</div>';return;}
+  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-notes"></i>no notes yet — write the first one!</div>';return;}
   el.innerHTML=rows.map(n=>`<div class="note-item"><div style="flex:1"><div class="note-text">${esc(n.text)}</div><div class="note-meta"><span class="ptag">${esc(n.poster||'')}</span> · ${fmtDate(n.created_at)}</div></div><button class="del-btn" onclick="delNote('${n.id}')"><i class="ti ti-x"></i></button></div>`).join('');
 }
 async function addNote(){const inp=document.getElementById('note-input');const v=inp.value.trim();if(!v)return;inp.value='';await dbInsert('notes',{text:v,poster:cfg.name1});loadNotes();}
@@ -696,7 +696,7 @@ async function loadMemories(){
   renderMemTags();
   const grid=document.getElementById('memories-grid');
   const filtered=memFilter==='all'?rows:rows.filter(m=>m.cat===memFilter);
-  if(!filtered.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><i class="ti ti-flask"></i>no memories yet!</div>';return;}
+  if(!filtered.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><i class="ti ti-flask"></i>no memories yet — add your first one!</div>';return;}
   grid.innerHTML=filtered.map(m=>{const cat=MEM_CATS.find(c=>c.id===m.cat)||MEM_CATS[2];return`<div class="mem-card" style="background:${cat.bg};border:0.5px solid ${cat.border}"><button class="del-btn mem-del" onclick="delMemory('${m.id}')"><i class="ti ti-x"></i></button><span class="mem-badge" style="background:${cat.bg};color:${cat.text};border:0.5px solid ${cat.border}">${cat.label}</span><div>${esc(m.text)}</div><div class="mem-who">${esc(m.poster||'')}</div></div>`;}).join('');
 }
 function renderMemTags(){document.getElementById('mem-tags').innerHTML=MEM_CATS.map(c=>`<button class="tag${memFilter===c.id?' sel':''}" onclick="setMemFilter('${c.id}')">${c.label}</button>`).join('');}
@@ -708,7 +708,7 @@ async function delMemory(id){await dbDelete('memories',id);loadMemories();}
 async function loadGoals(){
   const rows=await dbSelect('goals','created_at',true);
   const el=document.getElementById('goals-list');
-  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-list"></i>add your first dream together!</div>';return;}
+  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-list"></i>add the first thing for Josh &amp; Loni to do together!</div>';return;}
   el.innerHTML=rows.map(g=>`<div class="goal-item"><div class="goal-check${g.done?' done':''}" onclick="toggleGoal('${g.id}',${!g.done})">${g.done?'<i class="ti ti-check"></i>':''}</div><div style="flex:1"><div class="goal-text${g.done?' done':''}">${esc(g.text)}</div><div class="goal-who">${esc(g.poster||'')}</div></div><button class="del-btn" onclick="delGoal('${g.id}')"><i class="ti ti-trash"></i></button></div>`).join('');
 }
 async function addGoal(){const inp=document.getElementById('goal-input');const v=inp.value.trim();if(!v)return;inp.value='';await dbInsert('goals',{text:v,done:false,poster:cfg.name1});loadGoals();}
@@ -724,15 +724,15 @@ async function sendHeartbeat(){
   btn.classList.add('beating');
   const ok=await dbInsert('heartbeats',{poster:cfg.name1});
   if(ok){
-    lbl.textContent='💓 sent to '+cfg.name2+'!';
-    setTimeout(()=>{lbl.textContent='tap to send a heartbeat 💓';},2500);
+    lbl.textContent='💓 sent to Loni!';
+    setTimeout(()=>{lbl.textContent='tap to send Loni a heartbeat 💓';},2500);
     loadHeartbeats();
   }
 }
 async function loadHeartbeats(){
   const rows=await dbSelect('heartbeats');
   const el=document.getElementById('hb-log');
-  if(!rows.length){el.innerHTML='<div class="empty-state" style="padding:0.75rem 0;"><i class="ti ti-heart"></i>no heartbeats yet</div>';return;}
+  if(!rows.length){el.innerHTML='<div class="empty-state" style="padding:0.75rem 0;"><i class="ti ti-heart"></i>no heartbeats yet — send Loni the first!</div>';return;}
   el.innerHTML=rows.slice(0,6).map(h=>`<div class="hb-item"><i class="ti ti-heart"></i><span><strong>${esc(h.poster||'someone')}</strong> sent a heartbeat</span><span class="hb-time">${fmtDate(h.created_at)}</span></div>`).join('');
 }
 
@@ -767,11 +767,11 @@ async function delLetter(id){await dbDelete('letters',id);loadLetters();}
 async function loadLetters(){
   const rows=await dbSelect('letters');
   const el=document.getElementById('letters-list');
-  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-mail"></i>no letters yet — write the first!</div>';return;}
+  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-mail"></i>no letters yet — write one for Loni!</div>';return;}
   el.innerHTML=rows.map(l=>{
     const isOwn=(l.poster===cfg.name1);
     const sealed=!l.opened&&!isOwn;
-    if(sealed)return`<div class="letter-item sealed" onclick="openLetter('${l.id}')"><span class="letter-seal">💌</span><div class="letter-sealed-label">a letter from ${esc(l.poster||'your partner')}<br><small style="font-weight:400;font-size:11px;">tap to open</small></div></div>`;
+    if(sealed)return`<div class="letter-item sealed" onclick="openLetter('${l.id}')"><span class="letter-seal">💌</span><div class="letter-sealed-label">a letter from ${esc(l.poster||'Loni')}<br><small style="font-weight:400;font-size:11px;">tap to open</small></div></div>`;
     return`<div class="letter-item"><div class="letter-from"><span>✉️ ${esc(l.poster||'')} · ${fmtDate(l.created_at)}</span><button class="del-btn" onclick="delLetter('${l.id}')"><i class="ti ti-trash"></i></button></div><div class="letter-body">${esc(l.body)}</div></div>`;
   }).join('');
 }
@@ -797,7 +797,7 @@ async function loadTimeline(){
 }
 function renderTL(rows,elId){
   const el=document.getElementById(elId);if(!el)return;
-  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-timeline"></i>no moments yet</div>';return;}
+  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-timeline"></i>no moments yet — add the first chapter of your story!</div>';return;}
   el.innerHTML='<div class="timeline">'+rows.map(t=>`<div class="tl-item"><div class="tl-dot${t.type==='milestone'?' milestone':''}"></div><div class="tl-date-label">${fmtDateShort(t.date)}</div><div class="tl-text">${esc(t.text)}${t.type==='milestone'?' 🌟':''}</div><div class="tl-who">${esc(t.poster||'')}</div></div>`).join('')+'</div>';
 }
 
@@ -820,7 +820,7 @@ async function loadWatchlist(){
   let filtered=watchFilter==='watched'?rows.filter(r=>r.watched):rows.filter(r=>!r.watched);
   if(watchFilter==='movie')filtered=filtered.filter(r=>r.type==='movie');
   else if(watchFilter==='tv')filtered=filtered.filter(r=>r.type==='tv');
-  if(!filtered.length){el.innerHTML='<div class="empty-state"><i class="ti ti-movie"></i>nothing here yet!</div>';return;}
+  if(!filtered.length){el.innerHTML='<div class="empty-state"><i class="ti ti-movie"></i>nothing on the list yet — add something for us to watch!</div>';return;}
   el.innerHTML=filtered.map(w=>`<div class="watch-item"><span class="watch-badge ${w.watched?'done':w.type}">${w.watched?'✅':w.type==='movie'?'🎬':'📺'} ${w.watched?'watched':w.type}</span><div style="flex:1;margin:0 8px;"><div class="watch-title${w.watched?' done':''}">${esc(w.title)}</div><div class="watch-who">${esc(w.poster||'')} added</div></div><button class="del-btn" onclick="toggleWatched('${w.id}',${!w.watched})" title="${w.watched?'unmark':'mark watched'}"><i class="ti ti-${w.watched?'arrow-back-up':'check'}"></i></button><button class="del-btn" onclick="delWatch('${w.id}')"><i class="ti ti-trash"></i></button></div>`).join('');
 }
 async function toggleWatched(id,watched){await dbUpdate('watchlist',id,{watched});loadWatchlist();}
