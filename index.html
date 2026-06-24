@@ -234,6 +234,32 @@ body{background:linear-gradient(180deg,#FFF4F0 0%,#FBF6FB 45%,#F3F7FB 100%);min-
 .settings-row small{font-size:11px;color:var(--ink-faint);display:block;margin-top:1px;font-weight:400;}
 .settings-row input,.settings-row select{width:160px;padding:7px 10px;border-radius:var(--r-md);border:0.5px solid var(--line);background:var(--paper);color:var(--ink);font-size:13px;font-family:var(--font-s);}
 
+/* THIS OR THAT */
+.tot-question{font-family:var(--font-d);font-size:1.35rem;font-weight:500;color:var(--ink);line-height:1.35;text-align:center;margin:0.75rem 0 1.25rem;}
+.tot-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.tot-opt{padding:16px 10px;border-radius:var(--r-lg);border:1.5px solid var(--line);background:var(--cream);font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:var(--font-s);text-align:center;transition:all 0.15s;line-height:1.4;}
+.tot-opt:hover{border-color:var(--pink-mid);background:var(--pink-light);}
+.tot-opt.picked-josh{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark);}
+.tot-opt.picked-loni{border-color:var(--purple);background:var(--purple-light);color:var(--purple-dark);}
+.tot-opt.picked-both{border-color:var(--pink);background:var(--pink-light);color:var(--pink-dark);}
+.tot-opt.revealed-winner{border-color:var(--amber);background:var(--amber-light);color:var(--amber);}
+.tot-status{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6;}
+.tot-reveal-btn{width:100%;padding:13px;border-radius:var(--r-lg);border:none;background:var(--pink);color:#fff;font-size:15px;font-weight:700;font-family:var(--font-s);cursor:pointer;margin-bottom:8px;transition:background 0.15s;}
+.tot-reveal-btn:hover{background:var(--pink-dark);}
+.tot-new-btn{width:100%;padding:11px;border-radius:var(--r-lg);border:0.5px solid var(--line);background:var(--paper);color:var(--ink);font-size:14px;font-weight:600;font-family:var(--font-s);cursor:pointer;transition:background 0.15s;}
+.tot-new-btn:hover{background:var(--cream);}
+.tot-legend{display:flex;gap:12px;justify-content:center;font-size:11px;color:var(--ink-soft);margin-bottom:12px;flex-wrap:wrap;}
+.tot-legend span{display:flex;align-items:center;gap:4px;}
+.tot-legend i{font-size:10px;}
+.tot-hist-item{padding:12px 0;border-bottom:0.5px solid var(--line-soft);}
+.tot-hist-item:last-child{border-bottom:none;}
+.tot-hist-q{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+.tot-hist-answers{display:flex;gap:8px;}
+.tot-hist-ans{flex:1;padding:6px 10px;border-radius:var(--r-md);font-size:12px;text-align:center;}
+.tot-hist-ans.josh{background:var(--teal-light);color:var(--teal-dark);}
+.tot-hist-ans.loni{background:var(--purple-light);color:var(--purple-dark);}
+.tot-hist-match{text-align:center;font-size:11px;margin-top:6px;color:var(--ink-faint);}
+
 .empty-state{text-align:center;padding:2rem 0;color:var(--ink-faint);font-size:13px;}
 .empty-state i{font-size:30px;display:block;margin-bottom:8px;opacity:0.35;}
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:999px;z-index:100;transition:transform 0.3s;white-space:nowrap;pointer-events:none;}
@@ -295,6 +321,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <button class="nav-btn" onclick="showSection('goals')" id="nav-goals"><i class="ti ti-list-check"></i>goals</button>
       <button class="nav-btn" onclick="showSection('connect')" id="nav-connect"><i class="ti ti-heart-handshake"></i>connect</button>
       <button class="nav-btn" onclick="showSection('watch')" id="nav-watch"><i class="ti ti-movie"></i>watch</button>
+      <button class="nav-btn" onclick="showSection('thisorthat')" id="nav-thisorthat"><i class="ti ti-arrows-left-right"></i>this/that</button>
       <button class="nav-btn" onclick="showSection('settings')" id="nav-settings"><i class="ti ti-settings"></i>settings</button>
     </nav>
 
@@ -477,6 +504,19 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
             <button class="wf-btn" id="wf-watched" onclick="setWatchFilter('watched')">✅ watched</button>
           </div>
           <div id="watch-list"></div>
+        </div>
+      </section>
+
+      <!-- THIS OR THAT -->
+      <section class="section" id="section-thisorthat">
+        <div class="card">
+          <div class="card-title">this or that</div>
+          <p class="muted">both answer secretly — once you've both picked, reveal together 🎉</p>
+          <div id="tot-current"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">past rounds</div>
+          <div id="tot-history"></div>
         </div>
       </section>
 
@@ -672,13 +712,14 @@ function subscribeRealtime(){
     .on('postgres_changes',{event:'*',schema:'public',table:'letters',filter:'user_id=eq.'+user.id},()=>loadLetters())
     .on('postgres_changes',{event:'*',schema:'public',table:'timeline',filter:'user_id=eq.'+user.id},()=>loadTimeline())
     .on('postgres_changes',{event:'*',schema:'public',table:'watchlist',filter:'user_id=eq.'+user.id},()=>loadWatchlist())
+    .on('postgres_changes',{event:'*',schema:'public',table:'thisorthat',filter:'user_id=eq.'+user.id},()=>loadTot())
     .on('postgres_changes',{event:'*',schema:'public',table:'settings',filter:'user_id=eq.'+user.id},()=>loadSettings())
     .subscribe(s=>{
       if(s==='SUBSCRIBED')setSyncStatus('live');
       else if(s==='CHANNEL_ERROR'||s==='TIMED_OUT')setSyncStatus('error');
     });
 }
-function loadAll(){loadNotes();loadMemories();loadGoals();loadPhotos();loadHeartbeats();loadListening();loadLetters();loadTimeline();loadWatchlist();}
+function loadAll(){loadNotes();loadMemories();loadGoals();loadPhotos();loadHeartbeats();loadListening();loadLetters();loadTimeline();loadWatchlist();loadTot();}
 
 // ── NOTES ─────────────────────────────────────────────────────
 async function loadNotes(){
@@ -886,6 +927,191 @@ function showSection(id){document.querySelectorAll('.section').forEach(s=>s.clas
 function populateTZSelects(){['s-tz1','s-tz2'].forEach(id=>{const sel=document.getElementById(id);if(!sel)return;sel.innerHTML='';TIMEZONES.forEach(tz=>{const o=document.createElement('option');o.value=tz;o.textContent=tz.replace(/_/g,' ');sel.appendChild(o);});});}
 let toastTimer;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2800);}
+
+// ── THIS OR THAT ───────────────────────────────────────────────
+const TOT_QUESTIONS=[
+  ['Beach','Mountains'],['Coffee','Tea'],['Summer','Winter'],['Early bird','Night owl'],
+  ['Cook at home','Eat out'],['Movies','TV shows'],['Cats','Dogs'],['City','Countryside'],
+  ['Text','Call'],['Sweet','Savoury'],['Sunrise','Sunset'],['Road trip','Fly'],
+  ['Books','Podcasts'],['Spicy food','Mild food'],['Introvert','Extrovert'],
+  ['Plan ahead','Spontaneous'],['Hot shower','Cold shower'],['Morning workout','Evening workout'],
+  ['Window seat','Aisle seat'],['Buy experiences','Buy things'],
+  ['Netflix night in','Night out'],['Minimalist','Maximalist'],
+  ['Reread favourites','Always new books'],['Early Christmas prep','Last minute'],
+  ['Live in a big city','Live somewhere quiet'],['Homebody','Adventurer'],
+  ['Sleep in','Get up early'],['Cook a big Sunday meal','Sunday brunch out'],
+  ['Long walks','Short intense workouts'],['Surprise gifts','Wishlist gifts']
+];
+
+async function loadTot(){
+  // Get the current active round (not yet archived)
+  const {data:rows}=await sb.from('thisorthat').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+  const el=document.getElementById('tot-current');
+  const histEl=document.getElementById('tot-history');
+  if(!rows||!rows.length){renderTotNew(el);renderTotHistory([],histEl);return;}
+  const current=rows.find(r=>!r.archived)||null;
+  const history=rows.filter(r=>r.archived);
+  if(current)renderTotRound(current,el);
+  else renderTotNew(el);
+  renderTotHistory(history,histEl);
+}
+
+function renderTotNew(el){
+  el.innerHTML=`
+    <div class="tot-question">ready for a new round?</div>
+    <button class="tot-reveal-btn" onclick="startTot()">🎲 pick a question</button>
+  `;
+}
+
+function renderTotRound(round,el){
+  const joshPicked=round.josh_answer;
+  const loniPicked=round.loni_answer;
+  const revealed=round.revealed;
+  const bothPicked=joshPicked&&loniPicked;
+  const opt1=round.option_a;
+  const opt2=round.option_b;
+
+  let opt1Class='tot-opt',opt2Class='tot-opt';
+  let statusHtml='';
+  let actionHtml='';
+
+  if(revealed){
+    // Show both answers highlighted
+    if(joshPicked===opt1)opt1Class+=' picked-josh';
+    if(joshPicked===opt2)opt2Class+=' picked-josh';
+    if(loniPicked===opt1)opt1Class+=(opt1Class.includes('josh')?' picked-both':' picked-loni');
+    if(loniPicked===opt2)opt2Class+=(opt2Class.includes('josh')?' picked-both':' picked-loni');
+    const matched=joshPicked===loniPicked;
+    statusHtml=`
+      <div class="tot-legend">
+        <span style="color:var(--teal-dark)">● Josh: ${esc(joshPicked||'—')}</span>
+        <span style="color:var(--purple-dark)">● Loni: ${esc(loniPicked||'—')}</span>
+      </div>
+      <div class="tot-status">${matched?'💛 you both picked the same thing!':'you picked differently — tell each other why!'}</div>
+    `;
+    actionHtml=`<button class="tot-new-btn" onclick="archiveTot('${round.id}')">next question →</button>`;
+  } else if(bothPicked){
+    // Both answered, ready to reveal
+    statusHtml=`<div class="tot-status">✅ Josh answered &nbsp;·&nbsp; ✅ Loni answered<br><strong>you're both ready — reveal!</strong></div>`;
+    actionHtml=`<button class="tot-reveal-btn" onclick="revealTot('${round.id}')">🎉 reveal our answers!</button>`;
+    // Hide what was picked until reveal
+    opt1Class='tot-opt';opt2Class='tot-opt';
+  } else {
+    // Still waiting for one or both
+    const joshDone=!!joshPicked;
+    const loniDone=!!loniPicked;
+    statusHtml=`
+      <div class="tot-status">
+        ${joshDone?'✅':'⏳'} Josh &nbsp;·&nbsp; ${loniDone?'✅':'⏳'} Loni<br>
+        <small>${bothPicked?'both answered!':'waiting for both to answer…'}</small>
+      </div>
+    `;
+    // Highlight what the current user picked (but not which one for the other)
+    if(joshPicked===opt1)opt1Class+=' picked-josh';
+    if(joshPicked===opt2)opt2Class+=' picked-josh';
+    if(loniPicked===opt1)opt1Class+=(opt1Class.includes('josh')?' picked-both':' picked-loni');
+    if(loniPicked===opt2)opt2Class+=(opt2Class.includes('josh')?' picked-both':' picked-loni');
+  }
+
+  el.innerHTML=`
+    <div class="tot-question">${esc(opt1)} &nbsp;or&nbsp; ${esc(opt2)}?</div>
+    <div class="tot-options">
+      <button class="tot-opt ${opt1Class}" onclick="pickTot('${round.id}','${esc(opt1)}')">${esc(opt1)}</button>
+      <button class="tot-opt ${opt2Class}" onclick="pickTot('${round.id}','${esc(opt2)}')">${esc(opt2)}</button>
+    </div>
+    ${statusHtml}
+    ${actionHtml}
+    <button class="tot-new-btn" style="margin-top:6px;" onclick="skipTot('${round.id}')">skip this question</button>
+  `;
+}
+
+function renderTotHistory(history,el){
+  if(!history.length){el.innerHTML='<div class="empty-state"><i class="ti ti-history"></i>no past rounds yet</div>';return;}
+  el.innerHTML=history.slice(0,20).map(r=>{
+    const matched=r.josh_answer&&r.loni_answer&&r.josh_answer===r.loni_answer;
+    return`<div class="tot-hist-item">
+      <div class="tot-hist-q">${esc(r.option_a)} or ${esc(r.option_b)}?</div>
+      <div class="tot-hist-answers">
+        <div class="tot-hist-ans josh">Josh: ${esc(r.josh_answer||'—')}</div>
+        <div class="tot-hist-ans loni">Loni: ${esc(r.loni_answer||'—')}</div>
+      </div>
+      <div class="tot-hist-match">${matched?'💛 matched!':'↔ different picks'}</div>
+    </div>`;
+  }).join('');
+}
+
+async function startTot(){
+  // Pick a random question not used recently
+  const {data:recent}=await sb.from('thisorthat').select('option_a,option_b').eq('user_id',user.id).order('created_at',{ascending:false}).limit(10);
+  const usedPairs=new Set((recent||[]).map(r=>r.option_a+'|'+r.option_b));
+  const available=TOT_QUESTIONS.filter(([a,b])=>!usedPairs.has(a+'|'+b));
+  const pool=available.length?available:TOT_QUESTIONS;
+  const [opt_a,opt_b]=pool[Math.floor(Math.random()*pool.length)];
+  await dbInsert('thisorthat',{option_a:opt_a,option_b:opt_b,josh_answer:null,loni_answer:null,revealed:false,archived:false});
+  loadTot();
+}
+
+async function pickTot(id,answer){
+  // Store answer under whichever name the current user is
+  // We'll use a simple approach: Josh is always name1, Loni is always name2
+  // The user picks who they are by tapping their name (we use cfg.name1 = Josh by default)
+  // Show a name picker if we don't know who's picking
+  const who=await getTotWho(id);
+  if(!who)return;
+  const field=who==='josh'?'josh_answer':'loni_answer';
+  await dbUpdate('thisorthat',id,{[field]:answer});
+  loadTot();toast(who==='josh'?'Josh picked '+answer+' 💛':'Loni picked '+answer+' 💜');
+}
+
+async function getTotWho(id){
+  // Check current round to see who still needs to answer
+  const {data}=await sb.from('thisorthat').select('*').eq('id',id).eq('user_id',user.id).single();
+  if(!data)return null;
+  const joshDone=!!data.josh_answer;
+  const loniDone=!!data.loni_answer;
+  // If both done, nothing to pick
+  if(joshDone&&loniDone){toast("You've both already answered — reveal!");return null;}
+  // If only one needs to answer, pick that one
+  if(joshDone&&!loniDone)return'loni';
+  if(!joshDone&&loniDone)return'josh';
+  // Both need to answer — ask who's picking right now
+  return await showWhoPicker();
+}
+
+function showWhoPicker(){
+  return new Promise(resolve=>{
+    const overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;background:rgba(42,36,48,0.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;';
+    overlay.innerHTML=`
+      <div style="background:var(--paper);border-radius:var(--r-lg);padding:1.5rem;max-width:320px;width:100%;text-align:center;">
+        <div style="font-family:var(--font-d);font-size:1.2rem;margin-bottom:0.5rem;">who's picking?</div>
+        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:1.25rem;line-height:1.5;">tap your name so we record the right answer</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <button style="padding:13px;border-radius:var(--r-md);border:1.5px solid var(--teal);background:var(--teal-light);color:var(--teal-dark);font-size:15px;font-weight:700;font-family:var(--font-s);cursor:pointer;" onclick="this.closest('div[style]').parentNode.__resolve('josh');this.closest('div[style]').remove()">Josh</button>
+          <button style="padding:13px;border-radius:var(--r-md);border:1.5px solid var(--purple);background:var(--purple-light);color:var(--purple-dark);font-size:15px;font-weight:700;font-family:var(--font-s);cursor:pointer;" onclick="this.closest('div[style]').parentNode.__resolve('loni');this.closest('div[style]').remove()">Loni</button>
+        </div>
+        <button style="margin-top:10px;background:none;border:none;font-size:12px;color:var(--ink-faint);cursor:pointer;" onclick="this.closest('div[style]').parentNode.__resolve(null);this.closest('div[style]').remove()">cancel</button>
+      </div>
+    `;
+    overlay.__resolve=resolve;
+    document.body.appendChild(overlay);
+  });
+}
+
+async function revealTot(id){
+  await dbUpdate('thisorthat',id,{revealed:true});
+  loadTot();toast('🎉 revealing!');
+}
+
+async function archiveTot(id){
+  await dbUpdate('thisorthat',id,{archived:true});
+  loadTot();
+}
+
+async function skipTot(id){
+  await dbUpdate('thisorthat',id,{archived:true});
+  loadTot();
+}
 </script>
 </body>
 </html>
