@@ -415,6 +415,15 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
           <button class="btn-sm" onclick="addMemory()"><i class="ti ti-plus"></i> add to jar</button>
           <div class="mem-grid" id="memories-grid"></div>
         </div>
+        <div class="card">
+          <div class="card-title">Loni's one-liners 😂</div>
+          <p class="muted">the funny things she says that you never want to forget</p>
+          <div class="row-input">
+            <input type="text" id="oneliner-input" placeholder="what did she say…">
+            <button onclick="addOneLiner()"><i class="ti ti-plus"></i> add</button>
+          </div>
+          <div class="list-scroll" id="oneliners-list"></div>
+        </div>
       </section>
 
       <!-- LISTS (goals + watch) -->
@@ -637,6 +646,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   // Keyboard shortcuts
   document.getElementById('note-input').addEventListener('keydown',e=>{if(e.key==='Enter')addNote();});
   document.getElementById('mem-input').addEventListener('keydown',e=>{if(e.key==='Enter')addMemory();});
+  document.getElementById('oneliner-input').addEventListener('keydown',e=>{if(e.key==='Enter')addOneLiner();});
   document.getElementById('goal-input').addEventListener('keydown',e=>{if(e.key==='Enter')addGoal();});
   document.getElementById('watch-input').addEventListener('keydown',e=>{if(e.key==='Enter')addWatch();});
   document.getElementById('photo-caption-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmPhotoUpload();});
@@ -697,6 +707,7 @@ function subscribeRealtime(){
   channel=sb.channel('ta-main-'+user.id)
     .on('postgres_changes',{event:'*',schema:'public',table:'notes',filter:'user_id=eq.'+user.id},()=>loadNotes())
     .on('postgres_changes',{event:'*',schema:'public',table:'memories',filter:'user_id=eq.'+user.id},()=>loadMemories())
+    .on('postgres_changes',{event:'*',schema:'public',table:'oneliners',filter:'user_id=eq.'+user.id},()=>loadOneLiners())
     .on('postgres_changes',{event:'*',schema:'public',table:'goals',filter:'user_id=eq.'+user.id},()=>loadGoals())
     .on('postgres_changes',{event:'*',schema:'public',table:'photos',filter:'user_id=eq.'+user.id},()=>loadPhotos())
     .on('postgres_changes',{event:'*',schema:'public',table:'heartbeats',filter:'user_id=eq.'+user.id},()=>loadHeartbeats())
@@ -711,7 +722,7 @@ function subscribeRealtime(){
       else if(s==='CHANNEL_ERROR'||s==='TIMED_OUT')setSyncStatus('error');
     });
 }
-function loadAll(){loadNotes();loadMemories();loadGoals();loadPhotos();loadHeartbeats();loadListening();loadLetters();loadTimeline();loadWatchlist();loadTot();}
+function loadAll(){loadNotes();loadMemories();loadGoals();loadPhotos();loadHeartbeats();loadListening();loadLetters();loadTimeline();loadWatchlist();loadTot();loadOneLiners();}
 
 // ── NOTES ─────────────────────────────────────────────────────
 async function loadNotes(){
@@ -736,6 +747,21 @@ function renderMemTags(){document.getElementById('mem-tags').innerHTML=MEM_CATS.
 function setMemFilter(id){memFilter=id;loadMemories();}
 async function addMemory(){const inp=document.getElementById('mem-input');const v=inp.value.trim();if(!v)return;const cat=memFilter==='all'?'sweet':memFilter;inp.value='';await dbInsert('memories',{text:v,cat,poster:cfg.name1});loadMemories();}
 async function delMemory(id){await dbDelete('memories',id);loadMemories();}
+
+// ── ONE-LINERS ────────────────────────────────────────────────
+async function loadOneLiners(){
+  const rows=await dbSelect('oneliners');
+  const el=document.getElementById('oneliners-list');
+  if(!rows.length){el.innerHTML='<div class="empty-state"><i class="ti ti-microphone-2"></i>nothing yet — she\'ll say something hilarious soon!</div>';return;}
+  el.innerHTML=rows.map(n=>`<div class="note-item"><div style="flex:1"><div class="note-text">"${esc(n.text)}"</div><div class="note-meta">${fmtDate(n.created_at)}</div></div><button class="del-btn" onclick="delOneLiner('${n.id}')"><i class="ti ti-trash"></i></button></div>`).join('');
+}
+async function addOneLiner(){
+  const inp=document.getElementById('oneliner-input');const v=inp.value.trim();if(!v)return;
+  inp.value='';
+  await dbInsert('oneliners',{text:v});
+  loadOneLiners();
+}
+async function delOneLiner(id){await dbDelete('oneliners',id);loadOneLiners();}
 
 // ── GOALS ─────────────────────────────────────────────────────
 async function loadGoals(){
