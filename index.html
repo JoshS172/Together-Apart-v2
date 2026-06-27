@@ -357,7 +357,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         </div>
         <div class="card">
           <div class="card-title">our story so far</div>
-          <div id="tl-home"></div>
+          <div id="tl-home" style="max-height:320px;overflow-y:auto;padding-right:4px;"></div>
           <button class="btn-sm" style="margin-top:10px;" onclick="showSection('connect')"><i class="ti ti-plus"></i> add a moment to our story</button>
         </div>
       </section>
@@ -831,7 +831,7 @@ async function addTimeline(){
 async function loadTimeline(){
   const rows=await dbSelect('timeline','date',false);
   renderTL(rows,'tl-full');
-  renderTL(rows.slice(0,3),'tl-home');
+  renderTL(rows,'tl-home');
 }
 function renderTL(rows,elId){
   const el=document.getElementById(elId);if(!el)return;
