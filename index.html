@@ -318,9 +318,8 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
       <button class="nav-btn" onclick="showSection('photos')" id="nav-photos"><i class="ti ti-photo"></i>photos</button>
       <button class="nav-btn" onclick="showSection('notes')" id="nav-notes"><i class="ti ti-writing"></i>notes</button>
       <button class="nav-btn" onclick="showSection('memories')" id="nav-memories"><svg class="jar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="8" width="10" height="13" rx="2"/><path d="M6 8h12"/><path d="M9 5h6a1 1 0 0 1 1 1v2H8V6a1 1 0 0 1 1-1z"/><path d="M10 12c0 0 .5 1 2 1s2-1 2-1"/></svg>jar</button>
-      <button class="nav-btn" onclick="showSection('goals')" id="nav-goals"><i class="ti ti-list-check"></i>goals</button>
+      <button class="nav-btn" onclick="showSection('goals')" id="nav-goals"><i class="ti ti-list-check"></i>lists</button>
       <button class="nav-btn" onclick="showSection('connect')" id="nav-connect"><i class="ti ti-heart-handshake"></i>connect</button>
-      <button class="nav-btn" onclick="showSection('watch')" id="nav-watch"><i class="ti ti-movie"></i>watch</button>
       <button class="nav-btn" onclick="showSection('thisorthat')" id="nav-thisorthat"><i class="ti ti-arrows-left-right"></i>this/that</button>
       <button class="nav-btn" onclick="showSection('settings')" id="nav-settings"><i class="ti ti-settings"></i>settings</button>
     </nav>
@@ -418,7 +417,7 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         </div>
       </section>
 
-      <!-- GOALS -->
+      <!-- LISTS (goals + watch) -->
       <section class="section" id="section-goals">
         <div class="card">
           <div class="card-title">couple bucket list</div>
@@ -429,9 +428,23 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
           </div>
           <div id="goals-list"></div>
         </div>
+        <div class="card">
+          <div class="card-title">watch list</div>
+          <p class="muted">movies and shows for Josh &amp; Loni to watch together</p>
+          <div class="watch-add">
+            <input type="text" id="watch-input" placeholder="title…">
+            <select id="watch-type"><option value="movie">🎬 movie</option><option value="tv">📺 tv show</option></select>
+            <button class="btn-sm" onclick="addWatch()"><i class="ti ti-plus"></i></button>
+          </div>
+          <div class="watch-filters">
+            <button class="wf-btn sel" id="wf-all" onclick="setWatchFilter('all')">all unwatched</button>
+            <button class="wf-btn" id="wf-movie" onclick="setWatchFilter('movie')">🎬 movies</button>
+            <button class="wf-btn" id="wf-tv" onclick="setWatchFilter('tv')">📺 shows</button>
+            <button class="wf-btn" id="wf-watched" onclick="setWatchFilter('watched')">✅ watched</button>
+          </div>
+          <div id="watch-list"></div>
+        </div>
       </section>
-
-      <!-- CONNECT -->
       <section class="section" id="section-connect">
         <!-- Heartbeat -->
         <div class="card">
@@ -487,26 +500,6 @@ footer p{font-size:11px;color:var(--ink-faint);line-height:1.6;max-width:400px;m
         </div>
       </section>
 
-      <!-- WATCH -->
-      <section class="section" id="section-watch">
-        <div class="card">
-          <div class="card-title">watch list</div>
-          <p class="muted">movies and shows for Josh &amp; Loni to watch together</p>
-          <div class="watch-add">
-            <input type="text" id="watch-input" placeholder="title…">
-            <select id="watch-type"><option value="movie">🎬 movie</option><option value="tv">📺 tv show</option></select>
-            <button class="btn-sm" onclick="addWatch()"><i class="ti ti-plus"></i></button>
-          </div>
-          <div class="watch-filters">
-            <button class="wf-btn sel" id="wf-all" onclick="setWatchFilter('all')">all unwatched</button>
-            <button class="wf-btn" id="wf-movie" onclick="setWatchFilter('movie')">🎬 movies</button>
-            <button class="wf-btn" id="wf-tv" onclick="setWatchFilter('tv')">📺 shows</button>
-            <button class="wf-btn" id="wf-watched" onclick="setWatchFilter('watched')">✅ watched</button>
-          </div>
-          <div id="watch-list"></div>
-        </div>
-      </section>
-
       <!-- THIS OR THAT -->
       <section class="section" id="section-thisorthat">
         <div class="card">
@@ -554,7 +547,6 @@ const QUESTIONS=["What's a small moment from today that made you smile?","If we 
 let sb=null,user=null,channel=null;
 let cfg={name1:'Me',tz1:'Australia/Sydney',name2:'Partner',tz2:'America/New_York',reunion:'',reunionLabel:'next reunion'};
 let memFilter='all',watchFilter='all',tlType='moment',pendingPhoto=null,activePoster=1;
-let planeDir=1,planePos=46;
 
 // ── AUTH & INIT ───────────────────────────────────────────────
 function initSupabase(){
@@ -892,11 +884,23 @@ function updateDistance(){
   else{document.getElementById('dist-km').textContent='set timezones in settings';}
 }
 function animatePlane(){
-  planePos+=planeDir*0.3;
-  if(planePos>90)planeDir=-1;
-  if(planePos<10)planeDir=1;
   const plane=document.getElementById('dist-plane');
-  if(plane){plane.style.left=planePos+'%';plane.style.transform=`translateY(-50%) scaleX(${planeDir>0?1:-1})`;}
+  if(!plane)return;
+  if(!cfg.reunion){plane.style.left='5%';plane.style.transform='translateY(-50%)';return;}
+  const reunionMs=new Date(cfg.reunion+'T00:00:00').getTime();
+  const nowMs=Date.now();
+  if(nowMs>=reunionMs){plane.style.left='92%';plane.style.transform='translateY(-50%)';plane.style.filter='drop-shadow(0 0 5px rgba(212,83,126,0.9))';return;}
+  // Journey starts 1 year before reunion
+  const startMs=reunionMs-(365*24*60*60*1000);
+  const total=reunionMs-startMs;
+  const elapsed=nowMs-startMs;
+  const progress=Math.max(0,Math.min(1,elapsed/total));
+  // Map 0→1 to 5%→90% so plane is always visible
+  const pct=5+(progress*85);
+  plane.style.left=pct+'%';
+  plane.style.transform='translateY(-50%)';
+  const daysLeft=(reunionMs-nowMs)/(86400000);
+  plane.style.filter=daysLeft<=14?'drop-shadow(0 0 4px rgba(212,83,126,0.8))':'none';
 }
 
 // ── CLOCKS & COUNTDOWN ────────────────────────────────────────
@@ -1030,7 +1034,10 @@ function renderTotHistory(history,el){
   el.innerHTML=history.slice(0,20).map(r=>{
     const matched=r.josh_answer&&r.loni_answer&&r.josh_answer===r.loni_answer;
     return`<div class="tot-hist-item">
-      <div class="tot-hist-q">${esc(r.option_a)} or ${esc(r.option_b)}?</div>
+      <div class="tot-hist-q" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${esc(r.option_a)} or ${esc(r.option_b)}?</span>
+        <button class="del-btn" onclick="delTot('${r.id}')" title="delete"><i class="ti ti-trash"></i></button>
+      </div>
       <div class="tot-hist-answers">
         <div class="tot-hist-ans josh">Josh: ${esc(r.josh_answer||'—')}</div>
         <div class="tot-hist-ans loni">Loni: ${esc(r.loni_answer||'—')}</div>
@@ -1039,6 +1046,7 @@ function renderTotHistory(history,el){
     </div>`;
   }).join('');
 }
+async function delTot(id){await dbDelete('thisorthat',id);loadTot();}
 
 async function startTot(){
   // Pick a random question not used recently
